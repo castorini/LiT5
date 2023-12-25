@@ -21,7 +21,8 @@ for topics in 'dl19' 'dl20'; do
         --text_maxlength 150 \
         --answer_maxlength 20 \
         --write_crossattention_scores \
-        --sort_key $sort_key
+        --sort_key $sort_key \
+        --bfloat16
         
     python -m pyserini.eval.trec_eval -c -m ndcg_cut.10 ${topics}-passage $runfile_path
 done 

@@ -10,6 +10,8 @@ class Options():
     def add_eval_options(self):
         self.parser.add_argument('--write_crossattention_scores', action='store_true', 
                         help='take relevance cross-attention scores from model')
+        self.parser.add_argument('--bfloat16', action='store_true', 
+                        help='Run model inference in bfloat16')
         self.parser.add_argument('--stride', type=int, default=1)
         self.parser.add_argument('--n_rerank_passages', type=int, default=1)
         self.parser.add_argument('--sort_key', type=str, default='none')

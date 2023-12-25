@@ -63,7 +63,9 @@ if __name__ == "__main__":
     eval_examples = src.data.load_data(opt.eval_data)
 
     model_class = src.model.FiD
-    model = model_class.from_pretrained(opt.model_path, from_flax=False).bfloat16().cuda().eval()
+    model = model_class.from_pretrained(opt.model_path, from_flax=False).cuda().eval()
+    if opt.bfloat16:
+        model = model.bfloat16()
     
     for query in eval_examples:
         query['ctxs'] = query['ctxs'][:opt.n_rerank_passages]

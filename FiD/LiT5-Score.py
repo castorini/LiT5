@@ -102,7 +102,9 @@ if __name__ == "__main__":
     )
     
     model_class = src.model.FiD
-    model = model_class.from_pretrained(opt.model_path, from_flax=False).bfloat16().cuda().eval()
+    model = model_class.from_pretrained(opt.model_path, from_flax=False).cuda().eval()
+    if opt.bfloat16:
+        model = model.bfloat16()
 
     print("Start Inference")
 

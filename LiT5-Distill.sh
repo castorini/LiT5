@@ -23,7 +23,8 @@ for topics in 'dl19' 'dl20'; do
     --text_maxlength 150 \
     --answer_maxlength 100 \
     --stride $stride \
-    --n_rerank_passages $total_n_rerank_passages 
+    --n_rerank_passages $total_n_rerank_passages \
+    --bfloat16
 
     python -m pyserini.eval.trec_eval -c -m ndcg_cut.10 ${topics}-passage $runfile_path
 done 
