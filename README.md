@@ -2,7 +2,7 @@
 
 ## 📟 Instructions
 
-We provide the scripts and data necessary to reproduce reranking results for [LiT5-Distill](LiT5-Distill.sh) and [LiT5-Score](LiT5-Score.sh) on DL19 and DL20 for BM25 and SPLADE++ ED first-stage retrieval. Note you may need to change the batchsize depending on your VRAM. We have observed that results may change slightly when the batchsize is changed. 
+We provide the scripts and data necessary to reproduce reranking results for [LiT5-Distill](LiT5-Distill.sh) and [LiT5-Score](LiT5-Score.sh) on DL19 and DL20 for BM25 and SPLADE++ ED first-stage retrieval. Note you may need to change the batchsize depending on your VRAM. We have observed that results may change slightly when the batchsize is changed. Additionally, you may need to remove the --bfloat16 option from the scripts if your GPU does not support it. This may also change results slightly.
 
 ## Models
 
@@ -58,6 +58,19 @@ This table shows the expected results for reranking with SPLADE++ ED first-stage
 | LiT5-Distill-large    |    76.3 |
 | LiT5-Distill-xl       |    76.8 |
 
+## ✨ References
+
+If you use LiT5, please cite the following paper: 
+[[2312.16098] Scaling Down, LiTting Up: Efficient Zero-Shot Listwise Reranking with Seq2seq Encoder-Decoder Models](https://arxiv.org/abs/2312.16098)
+
+```
+@ARTICLE{tamber2023scaling,
+  title   = {Scaling Down, LiTting Up: Efficient Zero-Shot Listwise Reranking with Seq2seq Encoder-Decoder Models},
+  author  = {Manveer Singh Tamber and Ronak Pradeep and Jimmy Lin},
+  year    = {2023},
+  journal = {arXiv preprint arXiv: 2312.16098}
+}
+```
 
 🙏 Acknowledgments
 
