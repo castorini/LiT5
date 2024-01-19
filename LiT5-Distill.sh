@@ -3,16 +3,17 @@
 firststage=bm25
 
 # Uncomment the model you wish to test
-model=castorini/LiT5-Distill-base; batchsize=130
-#model=castorini/LiT5-Distill-large; batchsize=65
-#model=castorini/LiT5-Distill-xl; batchsize=18
+model=castorini/LiT5-Distill-base; batchsize=260
+#model=castorini/LiT5-Distill-large; batchsize=120
+#model=castorini/LiT5-Distill-xl; batchsize=36
 
 total_n_rerank_passages=100
 windowsize=20
 stride=10
+n_passes=1
 
-for topics in 'dl19' 'dl20'; do
-    runfile_path="runs/run.${topics}_${firststage}_${model//\//}.trec"
+for topics in 'dl19' 'dl20' 'dl21' 'dl22'; do
+    runfile_path="runs/run.${topics}_${firststage}_${model//\//}"
 
     python3 FiD/LiT5-Distill.py \
     --model_path $model \
@@ -24,7 +25,10 @@ for topics in 'dl19' 'dl20'; do
     --answer_maxlength 100 \
     --stride $stride \
     --n_rerank_passages $total_n_rerank_passages \
-    --bfloat16
+    --bfloat16 \
+    --n_passes $n_passes
 
-    python -m pyserini.eval.trec_eval -c -m ndcg_cut.10 ${topics}-passage $runfile_path
+    for ((i = 0 ; i < n_passes ; i++ )); do
+        python -m pyserini.eval.trec_eval -c -m ndcg_cut.10 ${topics}-passage ${runfile_path}.${i}.trec
+    done
 done 

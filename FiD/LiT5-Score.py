@@ -1,5 +1,9 @@
 import torch
 import transformers
+
+torch.manual_seed(0)
+transformers.set_seed(0)
+
 import numpy as np
 from torch.utils.data import DataLoader, SequentialSampler
 
@@ -72,8 +76,6 @@ def evaluate(model, dataset, dataloader, tokenizer, opt):
 
 
 if __name__ == "__main__":
-    torch.manual_seed(0)
-    transformers.set_seed(0)
     options = Options()
     options.add_reader_options()
     options.add_eval_options()
@@ -103,6 +105,7 @@ if __name__ == "__main__":
     
     model_class = src.model.FiD
     model = model_class.from_pretrained(opt.model_path, from_flax=False).cuda().eval()
+
     if opt.bfloat16:
         model = model.bfloat16()
 
@@ -118,8 +121,12 @@ if __name__ == "__main__":
                     sort_passages.append(passage)
             sort_passages = sorted(sort_passages, key=lambda x: x[opt.sort_key], reverse=True)
             
+            sum_of_scores = 0 # used to normalize scores
+            for passage in sort_passages:
+                sum_of_scores += passage[opt.sort_key]
+
             rank = 1
             for passage in sort_passages: 
-                f.write(" ".join([query['id'], "Q0", str(passage['docid']), str(rank), str(1/rank), "ScoreFiD\n"]))
+                f.write(" ".join([query['id'], "Q0", str(passage['docid']), str(rank), str(passage[opt.sort_key]/sum_of_scores), "ScoreFiD\n"]))
                 rank+=1
 

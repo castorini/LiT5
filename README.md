@@ -2,7 +2,7 @@
 
 ## 📟 Instructions
 
-We provide the scripts and data necessary to reproduce reranking results for [LiT5-Distill](LiT5-Distill.sh) and [LiT5-Score](LiT5-Score.sh) on DL19 and DL20 for BM25 and SPLADE++ ED first-stage retrieval. Note you may need to change the batchsize depending on your VRAM. We have observed that results may change slightly when the batchsize is changed. Additionally, you may need to remove the --bfloat16 option from the scripts if your GPU does not support it. This may also change results slightly.
+We provide the scripts and data necessary to reproduce reranking results for [LiT5-Distill](LiT5-Distill.sh) and [LiT5-Score](LiT5-Score.sh) on DL19 and DL20 for BM25 and SPLADE++ ED first-stage retrieval. Note you may need to change the batchsize depending on your VRAM. We have observed that results may change slightly when the batchsize is changed. [This is a known issue when running inference in bfloat16](https://github.com/huggingface/transformers/issues/25921). Additionally, you may need to remove the --bfloat16 option from the scripts if your GPU does not support it.
 
 ## Models
 
@@ -25,9 +25,9 @@ This table shows the expected results for reranking with BM25 first-stage retrie
 ### DL19
 | Model Name            | nDCG@10 |
 |-----------------------|---------|
-| LiT5-Distill-base     |    72.1 |
+| LiT5-Distill-base     |    71.7 |
 | LiT5-Distill-large    |    72.7 |
-| LiT5-Distill-xl       |    72.2 |
+| LiT5-Distill-xl       |    72.3 |
 | LiT5-Score-base       |    68.9 |
 | LiT5-Score-large      |    72.0 |
 | LiT5-Score-xl         |    70.0 |
@@ -35,9 +35,9 @@ This table shows the expected results for reranking with BM25 first-stage retrie
 ### DL20
 | Model Name            | nDCG@10 |
 |-----------------------|---------|
-| LiT5-Distill-base     |    68.5 |
-| LiT5-Distill-large    |    70.3 |
-| LiT5-Distill-xl       |    72.2 |
+| LiT5-Distill-base     |    68.0 |
+| LiT5-Distill-large    |    70.0 |
+| LiT5-Distill-xl       |    71.8 |
 | LiT5-Score-base       |    66.2 |
 | LiT5-Score-large      |    67.8 |
 | LiT5-Score-xl         |    65.7 |
@@ -47,16 +47,22 @@ This table shows the expected results for reranking with SPLADE++ ED first-stage
 ### DL19
 | Model Name            | nDCG@10 |
 |-----------------------|---------|
-| LiT5-Distill-base     |    74.8 |
-| LiT5-Distill-large    |    77.2 |
-| LiT5-Distill-xl       |    77.1 |
+| LiT5-Distill-base     |    74.6 |
+| LiT5-Distill-large    |    76.8 |
+| LiT5-Distill-xl       |    76.8 |
+| LiT5-Score-base       |    68.4 |
+| LiT5-Score-large      |    68.7 |
+| LiT5-Score-xl         |    69.0 |
 
 ### DL20
 | Model Name            | nDCG@10 |
 |-----------------------|---------|
-| LiT5-Distill-base     |    74.9 |
-| LiT5-Distill-large    |    76.3 |
-| LiT5-Distill-xl       |    76.8 |
+| LiT5-Distill-base     |    74.1 |
+| LiT5-Distill-large    |    76.5 |
+| LiT5-Distill-xl       |    76.7 |
+| LiT5-Score-base       |    68.5 |
+| LiT5-Score-large      |    73.1 |
+| LiT5-Score-xl         |    71.0 |
 
 ## ✨ References
 

@@ -15,6 +15,7 @@ class Options():
         self.parser.add_argument('--stride', type=int, default=1)
         self.parser.add_argument('--n_rerank_passages', type=int, default=1)
         self.parser.add_argument('--sort_key', type=str, default='none')
+        self.parser.add_argument('--n_passes', type=int, default=1)
 
     def add_reader_options(self):
         self.parser.add_argument('--eval_data', type=str, default='none', help='path of eval data')

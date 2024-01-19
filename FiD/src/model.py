@@ -7,9 +7,19 @@ from torch.nn import CrossEntropyLoss
 import numpy as np
 import copy
 
-from src.modeling_t5 import T5ForConditionalGeneration, T5Stack
 from src.options import Options
 
+options = Options()
+options.add_reader_options()
+options.add_eval_options()
+opt = options.parse()
+
+if opt.write_crossattention_scores:
+    from src.modeling_t5 import T5ForConditionalGeneration, T5Stack
+else:
+    from transformers.models.t5.modeling_t5 import T5ForConditionalGeneration, T5Stack
+
+    
 class FiDStack(T5Stack):
     def __init__(self, config, embed_tokens=None):
         super().__init__(config, embed_tokens=embed_tokens)
@@ -79,11 +89,6 @@ class FiD(T5ForConditionalGeneration):
         self.model_dim = config.d_model
 
         self.shared = nn.Embedding(config.vocab_size, config.d_model)
-        
-        options = Options()
-        options.add_reader_options()
-        options.add_eval_options()
-        opt = options.parse()
 
         self.config.n_passages = opt.n_passages
         self.config.bsz = opt.batch_size
@@ -98,6 +103,7 @@ class FiD(T5ForConditionalGeneration):
         decoder_config = copy.deepcopy(config)
         decoder_config.is_decoder = True
         decoder_config.is_encoder_decoder = False
+        decoder_config.use_cache = True
         decoder_config.num_layers = config.num_decoder_layers
         self.decoder = FiDStack(decoder_config, self.shared)
 

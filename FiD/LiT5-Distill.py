@@ -1,5 +1,9 @@
 import torch
 import transformers
+
+torch.manual_seed(0)
+transformers.set_seed(0)
+
 import numpy as np
 from torch.utils.data import DataLoader, SequentialSampler
 
@@ -26,7 +30,7 @@ def evaluate(model, dataset, dataloader, tokenizer, opt):
                 max_length=opt.answer_maxlength,
                 do_sample=False
             )
-                                        
+
             for k, o in enumerate(outputs):
                 output = tokenizer.decode(o, skip_special_tokens=True)
                 generated_permutations.append(output)
@@ -50,8 +54,6 @@ def remove_duplicate(response: List[int]) -> List[int]:
 
 
 if __name__ == "__main__":
-    torch.manual_seed(0)
-    transformers.set_seed(0)
     options = Options()
     options.add_reader_options()
     options.add_eval_options()
@@ -63,10 +65,11 @@ if __name__ == "__main__":
     eval_examples = src.data.load_data(opt.eval_data)
 
     model_class = src.model.FiD
-    model = model_class.from_pretrained(opt.model_path, from_flax=False).cuda().eval()
+    model = model_class.from_pretrained(opt.model_path).cuda().eval()
+    
     if opt.bfloat16:
         model = model.bfloat16()
-    
+
     for query in eval_examples:
         query['ctxs'] = query['ctxs'][:opt.n_rerank_passages]
     
@@ -74,7 +77,7 @@ if __name__ == "__main__":
     window_size = opt.n_passages
 
     print("Start Inference")
-    for passes in range(1):
+    for passes in range(opt.n_passes):
         for window_start_idx in range(opt.n_rerank_passages - window_size, -1, -stride):
             eval_dataset = src.data.Dataset(
                 eval_examples, 
@@ -96,7 +99,6 @@ if __name__ == "__main__":
             )
             
             generated_permutations = evaluate(model, eval_dataset, eval_dataloader, tokenizer, opt)
-            eval_examples = eval_dataset.data
             
             for i in range(len(eval_examples)):
                 query_dict = eval_examples[i]
@@ -112,13 +114,13 @@ if __name__ == "__main__":
                     response = response + [tt for tt in original_rank if tt not in response]
                     for j, x in enumerate(response):
                         query_dict['ctxs'][j + window_start_idx] = resort_passages[x]
-
-    with open(opt.runfile_path, 'w') as f:
-        for query in eval_dataset.data:
-            rank = 1
-            for passage in query['ctxs']:
-                if 'docid' in passage.keys(): 
-                    f.write(" ".join([query['id'], "Q0", str(passage['docid']), str(rank), str(1/rank), "RankFiD\n"]))
-                    rank+=1
+        
+        with open(opt.runfile_path + '.' + str(passes) + '.trec', 'w') as f:
+            for query in eval_examples:
+                rank = 1
+                for passage in query['ctxs']:
+                    if 'docid' in passage.keys(): 
+                        f.write(" ".join([query['id'], "Q0", str(passage['docid']), str(rank), str(1/rank), "RankFiD\n"]))
+                        rank+=1
 
 
