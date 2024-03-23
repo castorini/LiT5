@@ -12,7 +12,7 @@ windowsize=20
 stride=10
 n_passes=1
 
-for topics in 'dl19' 'dl20' 'dl21' 'dl22'; do
+for topics in 'dl19' 'dl20'; do
     runfile_path="runs/run.${topics}_${firststage}_${model//\//}"
 
     python3 FiD/LiT5-Distill.py \

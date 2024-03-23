@@ -9,7 +9,7 @@ model=castorini/LiT5-Score-base; batchsize=30
 #model=castorini/LiT5-Score-large; batchsize=10
 #model=castorini/LiT5-Score-xl; batchsize=4
 
-for topics in 'dl19' 'dl20' 'dl21' 'dl22'; do
+for topics in 'dl19' 'dl20'; do
     runfile_path="runs/run.${topics}_${firststage}_${model//\//}.trec"
 
     python3 FiD/LiT5-Score.py \
