@@ -1,4 +1,4 @@
-torch==2.0.1
-transformers==4.33.1
+torch==2.3.0
+transformers==4.40.2
 pyserini
 faiss-cpu

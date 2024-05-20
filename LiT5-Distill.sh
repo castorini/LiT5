@@ -3,12 +3,16 @@
 firststage=bm25
 
 # Uncomment the model you wish to test
-model=castorini/LiT5-Distill-base; batchsize=260
-#model=castorini/LiT5-Distill-large; batchsize=120
-#model=castorini/LiT5-Distill-xl; batchsize=36
+model=castorini/LiT5-Distill-base; batchsize=260; windowsize=20
+#model=castorini/LiT5-Distill-base-v2; batchsize=68; windowsize=100
+
+#model=castorini/LiT5-Distill-large; batchsize=120; windowsize=20
+#model=castorini/LiT5-Distill-large-v2; batchsize=22; windowsize=100
+
+#model=castorini/LiT5-Distill-xl; batchsize=36; windowsize=20
+#model=castorini/LiT5-Distill-xl-v2; batchsize=12; windowsize=100
 
 total_n_rerank_passages=100
-windowsize=20
 stride=10
 n_passes=1
 
@@ -22,7 +26,7 @@ for topics in 'dl19' 'dl20'; do
     --n_passages $windowsize \
     --runfile_path $runfile_path \
     --text_maxlength 150 \
-    --answer_maxlength 100 \
+    --answer_maxlength 140 \
     --stride $stride \
     --n_rerank_passages $total_n_rerank_passages \
     --bfloat16 \
