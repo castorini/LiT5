@@ -1,5 +1,8 @@
 # LiT5 (List-in-T5) Reranking
 
+## RankLLM
+We have integrated LiT5 into [RankLLM](https://github.com/castorini/rank_llm), which is actively maintained and includes additional improvements. We highly recommend using RankLLM.
+
 ## 📟 Instructions
 
 We provide the scripts and data necessary to reproduce reranking results for [LiT5-Distill](LiT5-Distill.sh) and [LiT5-Score](LiT5-Score.sh) on DL19 and DL20 for BM25 and SPLADE++ ED first-stage retrieval. Note you may need to change the batchsize depending on your VRAM. We have observed that results may change slightly when the batchsize is changed. [This is a known issue when running inference in bfloat16](https://github.com/huggingface/transformers/issues/25921). Additionally, you may need to remove the --bfloat16 option from the scripts if your GPU does not support it.
